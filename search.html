@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>NebulaSearch</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    .search-bar:focus {
+      box-shadow: 0 0 8px rgba(120, 200, 255, 0.5);
+    }
+    .modal-bg {
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+  </style>
+</head>
+<body class="bg-neutral-950 text-white flex flex-col items-center justify-center min-h-screen px-4 relative">
+  <h1 class="text-5xl font-light mb-10 tracking-wide">NebulaSearch</h1>
+
+  <form id="searchForm" class="w-full max-w-2xl">
+    <div class="flex items-center gap-2 bg-white rounded-full px-4 py-2">
+      <input
+        type="text"
+        id="searchInput"
+        name="q"
+        placeholder="キーワードを入力"
+        class="search-bar w-full text-black px-4 py-2 rounded-full focus:outline-none"
+      />
+      <button type="button" title="音声検索" class="text-gray-500 hover:text-blue-400">🔍</button>
+    </div>
+
+    <div class="flex justify-center gap-4 mt-6">
+      <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Nebula検索</button>
+      <button type="button" onclick="openModal()" class="bg-gray-800 text-white px-6 py-2 rounded hover:bg-gray-700">キーワードを受け取る</button>
+    </div>
+  </form>
+<!-- 🌌 モーダル：複数キーワード -->
+<div id="keywordModal" class="hidden fixed inset-0 flex items-center justify-center modal-bg z-50">
+  <div class="bg-gray-900 rounded-lg p-6 w-full max-w-md text-center border border-blue-400 space-y-4">
+    <p class="text-lg mb-2">受け取ったキーワードを選択：</p>
+    <div class="grid grid-cols-2 gap-3">
+      <button onclick="useKeyword('special_game')" class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 text-white">special_game</button>
+      <button onclick="useKeyword('home')" class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 text-white">home</button>
+      <button onclick="useKeyword('web_develop')" class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 text-white">web_develop</button>
+      <button onclick="useKeyword('OnlineOS')" class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 text-white">OnlineOS</button>
+      <button onclick="useKeyword('Browser')" class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 text-white">Browser</button>
+      <button onclick="useKeyword('research')" class="bg-blue-600 px-4 py-2 rounded hover:bg-blue-700 text-white">research</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const keywordLinks = {
+    special_game: "https://dreeam00.github.io/secret_game/",
+    home: "https://dreeam00.github.io/",
+    web_develop: "https://dreeam00.github.io/easy-web-develop/",
+    OnlineOS: "https://dreeam00.github.io/phantom-os/",
+    Browser: "https://dreeam00.github.io/ZeroPage/",
+    research: "https://dreeam00.github.io/ProjectOne/"
+  };
+
+  function openModal() {
+    document.getElementById("keywordModal").classList.remove("hidden");
+  }
+
+  function useKeyword(keyword) {
+    document.getElementById("searchInput").value = keyword;
+    document.getElementById("keywordModal").classList.add("hidden");
+  }
+
+  document.getElementById("searchForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const keyword = document.getElementById("searchInput").value.trim();
+
+    if (keywordLinks[keyword]) {
+      window.location.href = keywordLinks[keyword];
+    } else {
+      window.location.href = `https://www.bing.com/search?q=${encodeURIComponent(keyword)}`;
+    }
+  });
+</script>
