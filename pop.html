@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dreeam00 — HYPER POP TOYBOX ULTIMATE</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Rubik+Doodle+Shadow&family=Fredoka:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Fredoka', 'sans-serif'],
+            comic: ['Bangers', 'cursive'],
+            doodle: ['Rubik Doodle Shadow', 'cursive'],
+            retro: ['"Press Start 2P"', 'cursive'],
+          },
+          colors: {
+            hyper: {
+              pink: '#FF0099',
+              yellow: '#FFEA00',
+              cyan: '#00EAFF',
+              lime: '#CCFF00',
+              purple: '#9D00FF',
+              orange: '#FF5E00',
+              dark: '#1a1a1a',
+            }
+          },
+          boxShadow: {
+            'brutal': '8px 8px 0px 0px #000000',
+            'brutal-sm': '4px 4px 0px 0px #000000',
+            'brutal-lg': '12px 12px 0px 0px #000000',
+          },
+          cursor: {
+            'grab': 'grab',
+            'grabbing': 'grabbing',
+          },
+          animation: {
+            'spin-slow': 'spin 8s linear infinite',
+            'bounce-fast': 'bounce 0.5s infinite',
+            'wiggle': 'wiggle 0.5s ease-in-out infinite',
+            'marquee': 'marquee 15s linear infinite',
+            'rainbow': 'rainbow 2s linear infinite',
+            'pulse-fast': 'pulse 0.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 3s ease-in-out infinite',
+          },
+          keyframes: {
+            wiggle: {
+              '0%, 100%': { transform: 'rotate(-3deg)' },
+              '50%': { transform: 'rotate(3deg)' },
+            },
+            marquee: {
+              '0%': { transform: 'translateX(100%)' },
+              '100%': { transform: 'translateX(-100%)' },
+            },
+            rainbow: {
+              '0%': { filter: 'hue-rotate(0deg)' },
+              '100%': { filter: 'hue-rotate(360deg)' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-color: #FFEA00;
+      --dot-color: rgba(0,0,0,0.05);
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: 
+        linear-gradient(var(--dot-color) 2px, transparent 2px),
+        linear-gradient(90deg, var(--dot-color) 2px, transparent 2px);
+      background-size: 40px 40px;
+      overflow-x: hidden;
+      transition: background-color 0.5s;
+    }
+    
+    /* Neo-Brutalist Base Styles */
+    .brutal-box {
+      background: white;
+      border: 4px solid black;
+      box-shadow: 8px 8px 0px black;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+      position: relative; /* For physics */
+    }
+    .brutal-box:active {
+      transform: translate(4px, 4px) !important;
+      box-shadow: 4px 4px 0px black !important;
+    }
+    
+    .brutal-btn {
+      display: inline-block;
+      font-family: 'Bangers', cursive;
+      letter-spacing: 1px;
+      border: 4px solid black;
+      box-shadow: 4px 4px 0px black;
+      transition: all 0.1s;
+      cursor: pointer;
+      text-transform: uppercase;
+      user-select: none;
+    }
+    .brutal-btn:hover {
+      transform: translate(-2px, -2px) scale(1.05);
+      box-shadow: 6px 6px 0px black;
+    }
+    .brutal-btn:active {
+      transform: translate(2px, 2px) scale(0.95);
+      box-shadow: 2px 2px 0px black;
+    }
+
+    /* Draggable Stickers */
+    .sticker {
+      position: absolute;
+      cursor: grab;
+      user-select: none;
+      filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.5));
+      transition: scale 0.1s;
+      z-index: 40;
+    }
+    .sticker:active {
+      cursor: grabbing;
+      scale: 1.2;
+      z-index: 100;
+    }
+
+    /* Graffiti Canvas */
+    #graffiti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; /* Default: click through */
+      z-index: 30;
+    }
+    body.drawing-mode #graffiti-canvas {
+      pointer-events: auto;
+      cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:24px;'><text y='24'>🖍️</text></svg>") 0 24, auto;
+    }
+
+    /* Particle Canvas */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Chaos Modes */
+    body.chaos-mode { animation: wiggle 0.2s infinite; filter: invert(1); }
+    body.party-mode { animation: rainbow 0.5s linear infinite; }
+
+    /* Comic Pop Effect */
+    .pop-text {
+      position: absolute;
+      pointer-events: none;
+      animation: popUp 0.6s forwards;
+      font-family: 'Bangers', cursive;
+      text-shadow: 2px 2px 0 #000;
+      z-index: 9999;
+      white-space: nowrap;
+    }
+    @keyframes popUp {
+      0% { transform: scale(0) rotate(0deg); opacity: 0; }
+      50% { transform: scale(1.5) rotate(-10deg); opacity: 1; }
+      100% { transform: scale(1) translateY(-50px) rotate(10deg); opacity: 0; }
+    }
+
+    /* Glitch Text Effect Class */
+    .glitch-hover:hover {
+        animation: rainbow 0.2s infinite;
+    }
+
+    /* Physics Body Class */
+    .physics-body {
+        position: fixed !important; /* Detach from flow */
+        z-index: 1000;
+        touch-action: none;
+    }
+    
+    /* Bug Game */
+    .bug-target {
+        position: absolute;
+        cursor: crosshair;
+        transition: transform 0.1s;
+    }
+    .bug-target:active { transform: scale(0.8); }
+
+    /* Synth Pads */
+    .synth-pad {
+        transition: all 0.1s;
+    }
+    .synth-pad.active {
+        background-color: white !important;
+        box-shadow: 0 0 20px #fff, 0 0 40px #fff;
+        transform: scale(0.95);
+    }
+    
+    /* Q&A Accordion */
+    .qa-card {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .qa-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+    .qa-card.open .qa-answer {
+        max-height: 200px; /* Arbitrary limit */
+        transition: max-height 0.3s ease-in;
+    }
+    .qa-card.open {
+        transform: scale(1.05) rotate(0deg) !important;
+        z-index: 10;
+        background-color: #fff !important;
+    }
+
+    /* Utils */
+    .rotate-r-1 { transform: rotate(1deg); }
+    .rotate-l-1 { transform: rotate(-1deg); }
+    
+    ::-webkit-scrollbar { width: 20px; }
+    ::-webkit-scrollbar-track { background: #fff; border-left: 4px solid #000; }
+    ::-webkit-scrollbar-thumb { background: #FF0099; border: 4px solid #000; }
+    ::-webkit-scrollbar-thumb:hover { background: #CCFF00; }
+
+    html.dark { --bg-color: #2d004d; --dot-color: rgba(255,255,255,0.1); }
+    html.dark body { color: white; }
+    html.dark .brutal-box { background: #1a1a1a; border-color: #fff; box-shadow: 8px 8px 0px #fff; color: #fff; }
+    html.dark .brutal-btn { border-color: #fff; box-shadow: 4px 4px 0px #fff; }
+  </style>
+</head>
+<body class="text-black overflow-x-hidden selection:bg-hyper-pink selection:text-white">
+
+  <!-- Canvases -->
+  <canvas id="graffiti-canvas"></canvas>
+  <canvas id="particle-canvas"></canvas>
+
+  <!-- Marquee Top -->
+  <div class="fixed top-0 inset-x-0 h-10 bg-black z-50 overflow-hidden flex items-center border-b-4 border-white">
+    <div class="whitespace-nowrap animate-marquee font-comic text-hyper-yellow text-xl tracking-widest pt-1">
+      HYPER POP TOYBOX ULTIMATE /// GRAVITY ENGINE: ONLINE /// CLICK EVERYTHING! /// MAKE IT RAIN! /// GLITCH THE MATRIX /// 
+      HYPER POP TOYBOX ULTIMATE /// GRAVITY ENGINE: ONLINE /// CLICK EVERYTHING! /// MAKE IT RAIN! /// GLITCH THE MATRIX /// 
+    </div>
+  </div>
+
+  <!-- Sticker Layer -->
+  <div id="sticker-layer" class="fixed inset-0 pointer-events-none z-40 overflow-hidden"></div>
+
+  <!-- SUPER TOY PANEL (Fixed Bottom) -->
+  <div class="fixed bottom-4 inset-x-0 z-[100] flex justify-center pointer-events-none">
+    <div class="brutal-box bg-white/90 backdrop-blur pointer-events-auto p-3 rounded-2xl flex gap-3 flex-wrap justify-center items-end max-w-4xl border-4 border-black shadow-brutal-lg transform hover:-translate-y-2 transition-transform">
+        
+        <div class="flex flex-col items-center gap-1">
+            <span class="font-comic text-sm">Draw</span>
+            <button id="draw-btn" class="brutal-btn bg-hyper-cyan w-12 h-12 rounded-xl flex items-center justify-center text-2xl" title="Draw">✏️</button>
+        </div>
+
+        <div class="flex flex-col items-center gap-1">
+            <span class="font-comic text-sm">Rain</span>
+            <button id="rain-btn" class="brutal-btn bg-hyper-purple text-white w-12 h-12 rounded-xl flex items-center justify-center text-2xl" title="Make it Rain">☔</button>
+        </div>
+
+        <div class="flex flex-col items-center gap-1">
+            <span class="font-comic text-sm text-red-600 font-bold">GRAVITY</span>
+            <button id="gravity-btn" class="brutal-btn bg-red-500 text-white w-16 h-16 rounded-xl flex items-center justify-center text-3xl animate-bounce-fast" title="DESTROY SITE">🧱</button>
+        </div>
+
+        <div class="flex flex-col items-center gap-1">
+            <span class="font-comic text-sm">Remix</span>
+            <button id="remix-btn" class="brutal-btn bg-hyper-lime w-12 h-12 rounded-xl flex items-center justify-center text-2xl" title="Random Colors">🎰</button>
+        </div>
+        
+        <div class="flex flex-col items-center gap-1">
+            <span class="font-comic text-sm">Reset</span>
+            <button onclick="location.reload()" class="brutal-btn bg-black text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl" title="Reset">🔄</button>
+        </div>
+
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div id="main-content" class="relative w-full max-w-7xl mx-auto px-4 py-20 z-10 transition-all duration-500">
+
+    <!-- Navbar -->
+    <nav class="sticky top-14 z-50 mb-16 flex justify-center">
+      <div class="brutal-box bg-white flex flex-wrap justify-center gap-3 px-6 py-3 rounded-full border-4 border-black rotate-r-1 hover:rotate-0 transition-transform">
+        <a href="#home" class="brutal-btn bg-hyper-cyan px-4 py-2 rounded-full text-xl rotate-l-2">Home 🏠</a>
+        <a href="#projects" class="brutal-btn bg-hyper-pink px-4 py-2 rounded-full text-xl rotate-r-2 text-white">Works 🚀</a>
+        <a href="#playground" class="brutal-btn bg-hyper-orange px-4 py-2 rounded-full text-xl rotate-l-1">Play 🎮</a>
+        <a href="#qa" class="brutal-btn bg-hyper-yellow px-4 py-2 rounded-full text-xl rotate-r-1">Q&A 🤪</a>
+        <a href="#about" class="brutal-btn bg-hyper-lime px-4 py-2 rounded-full text-xl rotate-l-1">About ⚡</a>
+        <button id="theme-btn" class="brutal-btn bg-black text-white px-4 py-2 rounded-full text-xl rotate-r-3">Dark 🌙</button>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="text-center py-10 relative">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-white rounded-full border-4 border-black opacity-40 blur-xl -z-10 rotate-3 dark:bg-black dark:border-white animate-spin-slow"></div>
+      
+      <div class="relative inline-block group cursor-pointer brutal-item" onclick="shakeAvatar()">
+        <div class="absolute -inset-4 bg-hyper-purple rounded-full border-4 border-black rotate-6 group-hover:rotate-12 transition-transform"></div>
+        <div class="absolute -inset-4 bg-hyper-orange rounded-full border-4 border-black -rotate-3 group-hover:-rotate-6 transition-transform"></div>
+        <img id="avatar-img" src="https://avatars.githubusercontent.com/u/221930979?v=4" alt="avatar" class="relative w-64 h-64 rounded-full border-8 border-black object-cover z-10 bg-white">
+        
+        <!-- Speech Bubble -->
+        <div id="speech-bubble" class="absolute -top-16 -right-24 bg-white border-4 border-black px-6 py-4 rounded-2xl shadow-brutal-sm rotate-6 z-20 hidden">
+          <p id="speech-text" class="font-comic text-2xl">Click me!!</p>
+          <div class="absolute bottom-0 left-0 w-6 h-6 bg-white border-b-4 border-r-4 border-black transform translate-y-1/2 -translate-x-1/2 rotate-45"></div>
+        </div>
+      </div>
+
+      <h1 class="mt-8 text-7xl md:text-9xl font-comic text-hyper-cyan hover:text-hyper-pink transition-colors cursor-help hacker-text brutal-item" data-value="dreeam00" style="-webkit-text-stroke: 4px black; text-shadow: 8px 8px 0px black;">
+        dreeam00
+      </h1>
+      
+      <div class="mt-6 inline-block bg-white dark:bg-black px-8 py-4 border-4 border-black shadow-brutal rotate-l-2 hover:rotate-r-1 transition-transform brutal-item">
+        <p class="text-2xl md:text-4xl font-doodle font-bold dark:text-white">
+          The <span class="text-hyper-pink">Hyper Pop</span> Developer
+        </p>
+      </div>
+    </section>
+
+    <!-- Projects Grid -->
+    <section id="projects" class="py-20">
+      <div class="mb-12 text-center">
+        <h2 class="inline-block text-6xl font-comic bg-hyper-lime px-10 py-4 border-4 border-black shadow-brutal rotate-r-2 hover:scale-110 transition-transform hacker-text brutal-item" data-value="MY TOY BOX" style="-webkit-text-stroke: 2px black;">
+          MY TOY BOX
+        </h2>
+      </div>
+
+      <!-- Filter -->
+      <div class="flex flex-wrap justify-center gap-4 mb-12">
+        <button class="filter-btn brutal-btn bg-white px-6 py-2 rounded-lg text-lg rotate-l-1" data-filter="all">ALL</button>
+        <button class="filter-btn brutal-btn bg-hyper-cyan px-6 py-2 rounded-lg text-lg rotate-r-1" data-filter="web">WEB</button>
+        <button class="filter-btn brutal-btn bg-hyper-pink px-6 py-2 rounded-lg text-lg text-white rotate-l-2" data-filter="desktop">APP</button>
+        <button class="filter-btn brutal-btn bg-hyper-orange px-6 py-2 rounded-lg text-lg rotate-r-2" data-filter="tools">TOOLS</button>
+      </div>
+
+      <div id="project-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 px-4">
+        <!-- populated by js -->
+      </div>
+    </section>
+
+    <!-- NEW PLAYGROUND SECTION -->
+    <section id="playground" class="py-20 relative">
+        <div class="absolute inset-0 bg-hyper-purple/10 transform skew-y-3 -z-10"></div>
+        
+        <div class="text-center mb-16">
+            <h2 class="inline-block text-6xl font-comic bg-hyper-orange text-white px-10 py-4 border-4 border-black shadow-brutal -rotate-1 hacker-text brutal-item" data-value="PLAY GROUND">
+                PLAY GROUND
+            </h2>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12 px-4">
+            
+            <!-- GAME 1: BUG SMASHER -->
+            <div class="brutal-box bg-white p-6 rotate-1 brutal-item">
+                <div class="flex justify-between items-center mb-4 border-b-4 border-black pb-4">
+                    <h3 class="text-3xl font-retro">BUG SMASHER 3000</h3>
+                    <div class="bg-black text-hyper-lime font-retro p-2 text-xl">SCORE: <span id="bug-score">0</span></div>
+                </div>
+                <div id="bug-area" class="relative w-full h-80 bg-gray-100 border-4 border-dashed border-gray-400 overflow-hidden cursor-crosshair">
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-400 font-comic text-2xl pointer-events-none">
+                        CLICK THE BUGS! 🐛
+                    </div>
+                </div>
+                <button id="start-bug-btn" class="mt-4 brutal-btn bg-hyper-pink text-white w-full py-2 text-xl">START GAME</button>
+            </div>
+
+            <!-- GAME 2: SYNTHESIZER -->
+            <div class="brutal-box bg-gray-900 p-6 -rotate-1 brutal-item text-white">
+                <div class="flex justify-between items-center mb-4 border-b-4 border-white pb-4">
+                    <h3 class="text-3xl font-retro text-hyper-cyan">CYBER DRUM MACHINE</h3>
+                    <div class="text-hyper-yellow font-comic text-xl animate-pulse">AUDIO: ON</div>
+                </div>
+                
+                <div id="synth-grid" class="grid grid-cols-4 gap-3 h-80">
+                    <!-- Pads generated by JS -->
+                </div>
+                <p class="mt-4 text-center font-comic text-gray-400">HOVER or CLICK to make noise 🎵</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Q&A SECTION -->
+    <section id="qa" class="py-20">
+        <div class="text-center mb-16">
+            <h2 class="inline-block text-6xl font-comic bg-hyper-cyan text-black px-10 py-4 border-4 border-black shadow-brutal rotate-2 hacker-text brutal-item" data-value="Q&A (THE TRUTH?)">
+                Q&A (THE TRUTH?)
+            </h2>
+        </div>
+        
+        <div id="qa-grid" class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 px-4">
+            <!-- Populated by JS -->
+        </div>
+    </section>
+
+    <!-- Philosophy -->
+    <section id="about" class="py-20">
+      <div class="brutal-box bg-white dark:bg-gray-800 p-8 transform -rotate-1 relative overflow-hidden group hover:rotate-1 transition-transform brutal-item">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-12 bg-hyper-yellow opacity-90 border-l-4 border-r-4 border-black -translate-y-6 rotate-2 z-10"></div>
+        
+        <h2 class="text-6xl font-comic mb-12 text-center hacker-text" data-value="PHILOSOPHY" style="text-shadow: 4px 4px 0px #ccc;">PHILOSOPHY</h2>
+        
+        <div class="grid md:grid-cols-2 gap-10 items-center">
+          <div class="text-3xl font-comic leading-relaxed space-y-6">
+            <p class="bg-hyper-pink text-white p-6 border-4 border-black shadow-brutal-sm rotate-1 hover:scale-105 transition-transform cursor-pointer brutal-item">
+              "Fun comes first!" 🎢
+            </p>
+            <p class="bg-hyper-cyan p-6 border-4 border-black shadow-brutal-sm -rotate-1 hover:scale-105 transition-transform cursor-pointer brutal-item">
+              Chaotic Good. 🎮
+            </p>
+            <p class="bg-hyper-lime p-6 border-4 border-black shadow-brutal-sm rotate-2 hover:scale-105 transition-transform cursor-pointer brutal-item">
+              Make it POP. 💥
+            </p>
+          </div>
+          <div class="flex justify-center">
+             <div class="w-72 h-72 bg-black rounded-full flex items-center justify-center border-8 border-hyper-yellow animate-[spin_4s_linear_infinite] hover:animate-none brutal-item">
+                <span class="text-9xl select-none cursor-grab active:cursor-grabbing hover:scale-125 transition-transform">🤪</span>
+             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section id="tech" class="py-20 text-center">
+      <h2 class="text-5xl font-comic mb-10 inline-block bg-hyper-purple text-white px-8 py-4 border-4 border-black shadow-brutal -rotate-2 hacker-text brutal-item" data-value="WEAPONS">
+        WEAPONS
+      </h2>
+      <div class="flex flex-wrap justify-center gap-6 max-w-5xl mx-auto" id="tech-wall">
+        <!-- Tech stickers -->
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="bg-black text-white py-24 border-t-8 border-hyper-pink text-center font-comic text-2xl relative overflow-hidden">
+    <div class="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48ZyBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMSI+PHBhdGggZD0iTTAgNDBoNDBWMEgwdjQwem0yMC0yMGgyMHYyMEgyMFYyMHpNNDAgMjBWMGgtMjB2MjBoMjB6Ii8+PC9nPjwvZz48L3N2Zz4=')]"></div>
+    <div class="relative z-10 space-y-4">
+      <p class="hacker-text" data-value="Konami Code? (↑↑↓↓←→←→BA)">Konami Code? (↑↑↓↓←→←→BA)</p>
+      <p class="text-hyper-yellow text-4xl">NO BORING STUFF ALLOWED.</p>
+      <p class="text-sm opacity-50">© 2025 dreeam00 - HYPER POP TOYBOX</p>
+    </div>
+  </footer>
+
+  <script>
+    /* --- CONFIG & STATE --- */
+    const CONFIG = {
+        gravity: 0.5,
+        bounce: 0.7,
+        friction: 0.99
+    };
+    
+    let state = {
+        gravityMode: false,
+        raining: false,
+        drawing: false,
+        chaos: 0
+    };
+
+    const projects = [
+      { title: "Retro Research", desc: "Old internet vibes.", category: "web", color: "bg-hyper-cyan", rotate: "rotate-2" },
+      { title: "IFoxer Browser", desc: "My dream browser.", category: "desktop", color: "bg-hyper-pink", rotate: "-rotate-1" },
+      { title: "Cute Mascot", desc: "Desktop buddy.", category: "desktop", color: "bg-hyper-yellow", rotate: "rotate-3" },
+      { title: "Phantom OS", desc: "Web OS simulation.", category: "web", color: "bg-hyper-lime", rotate: "-rotate-2" },
+      { title: "Tool Box", desc: "Web dev toys.", category: "tools", color: "bg-hyper-orange", rotate: "rotate-1" },
+      { title: "Super p5.js", desc: "Creative coding.", category: "tools", color: "bg-hyper-purple", rotate: "-rotate-3" },
+      { title: "404 Museum", desc: "Broken link art.", category: "web", color: "bg-white", rotate: "rotate-2" },
+      { title: "Game Lang", desc: "Make games fast.", category: "tools", color: "bg-hyper-cyan", rotate: "-rotate-1" }
+    ];
+
+    const qaData = [
+        { q: "Are you a robot?", a: "Beep boop... I mean, NO! 🤖", color: "bg-hyper-cyan" },
+        { q: "Can you hack NASA?", a: "Nice try, FBI. 🕶️", color: "bg-hyper-pink" },
+        { q: "Why is this site loud?", a: "SILENCE IS BORING! 📢", color: "bg-hyper-yellow" },
+        { q: "Tabs or Spaces?", a: "I write code in one long line. 🧵", color: "bg-hyper-lime" },
+        { q: "Do you sleep?", a: "Loading sleep.exe... Error 404. 😴", color: "bg-white" },
+        { q: "Favorite snack?", a: "RAM sticks & Pizza. 🍕", color: "bg-hyper-orange" },
+        { q: "How to exit Vim?", a: "You don't. You live there now. 📟", color: "bg-hyper-purple" },
+        { q: "Is this design too much?", a: "NEVER! MORE CHAOS! 🌈", color: "bg-hyper-cyan" }
+    ];
+
+    const techStack = ["HTML", "CSS", "JS", "C#", ".NET", "React", "Tailwind", "Git", "p5.js", "Unity", "Figma"];
+    const stickers = ["⭐", "⚡", "💖", "🔥", "🚀", "💣", "💎", "👁️", "🌈", "🍄", "👽", "👾", "🍕", "🎸", "🧱", "🦄"];
+    const clickWords = ["POW!", "BAM!", "BOOM!", "ZAP!", "POP!", "YEAH!", "COOL!", "NICE!", "CRASH!", "OMG!"];
+    const avatarPhrases = ["Coding...", "Bug fixed!", "Hello World!", "Don't touch me!", "Gravity??", "Playful!", "Glitch!"];
+
+    /* --- AUDIO ENGINE --- */
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playSound(type, freqOverride) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+
+      if (type === 'pop') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.exponentialRampToValueAtTime(800, now + 0.1);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.start();
+        osc.stop(now + 0.1);
+      } else if (type === 'hover') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(200, now);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.05);
+        osc.start();
+        osc.stop(now + 0.05);
+      } else if (type === 'synth') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(freqOverride || 440, now);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        
+        // Filter for cooler sound
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1000, now);
+        filter.frequency.exponentialRampToValueAtTime(200, now + 0.3);
+        osc.disconnect();
+        osc.connect(filter);
+        filter.connect(gain);
+
+        osc.start();
+        osc.stop(now + 0.3);
+      } else if (type === 'squish') {
+         osc.type = 'sawtooth';
+         osc.frequency.setValueAtTime(150, now);
+         osc.frequency.linearRampToValueAtTime(50, now + 0.1);
+         gain.gain.setValueAtTime(0.2, now);
+         gain.gain.linearRampToValueAtTime(0, now + 0.1);
+         osc.start();
+         osc.stop(now + 0.1);
+      } else if (type === 'crash') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(100, now);
+        osc.frequency.exponentialRampToValueAtTime(10, now + 0.3);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start();
+        osc.stop(now + 0.3);
+      } else if (type === 'remix') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.linearRampToValueAtTime(880, now + 0.1);
+        osc.frequency.linearRampToValueAtTime(440, now + 0.2);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.2);
+        osc.start();
+        osc.stop(now + 0.2);
+      } else if (type === 'slide') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.linearRampToValueAtTime(600, now + 0.2);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.linearRampToValueAtTime(0, now + 0.2);
+        osc.start();
+        osc.stop(now + 0.2);
+      }
+    }
+
+    /* --- INITIALIZATION --- */
+    document.addEventListener('DOMContentLoaded', () => {
+        renderProjects('all');
+        renderTech();
+        renderQA();
+        spawnStickers(10);
+        initHackerText();
+        initBugGame();
+        initSynth();
+        requestAnimationFrame(gameLoop);
+    });
+
+    // 1. Render Projects
+    const projectContainer = document.getElementById('project-container');
+    function renderProjects(filter) {
+        projectContainer.innerHTML = '';
+        projects.forEach(p => {
+            if (filter !== 'all' && p.category !== filter) return;
+            const card = document.createElement('div');
+            card.className = `brutal-box brutal-item ${p.color} p-6 flex flex-col h-72 justify-between transform ${p.rotate} hover:scale-105 hover:z-20 relative transition-transform duration-200`;
+            card.innerHTML = `
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-white/40 border-l-2 border-r-2 border-black rotate-1 backdrop-blur-sm pointer-events-none"></div>
+                <div class="pointer-events-none">
+                    <span class="inline-block border-2 border-black bg-white px-2 py-1 text-xs font-bold uppercase mb-2 shadow-[2px_2px_0px_#000]">${p.category}</span>
+                    <h3 class="text-4xl font-comic leading-none mb-2 text-white" style="-webkit-text-stroke: 1.5px black;">${p.title}</h3>
+                    <p class="font-bold opacity-90 font-sans text-lg">${p.desc}</p>
+                </div>
+                <button class="brutal-btn bg-black text-white py-2 text-xl hover:bg-white hover:text-black w-full">Check it ➜</button>
+            `;
+            card.addEventListener('mouseenter', () => playSound('hover'));
+            card.addEventListener('mousedown', () => playSound('pop'));
+            projectContainer.appendChild(card);
+        });
+    }
+
+    // 2. Render Tech
+    function renderTech() {
+        const techWall = document.getElementById('tech-wall');
+        techStack.forEach((t, i) => {
+            const span = document.createElement('div');
+            const rotate = (i % 2 === 0) ? 'rotate-2' : '-rotate-2';
+            const color = i % 3 === 0 ? 'bg-hyper-lime' : (i % 3 === 1 ? 'bg-hyper-pink' : 'bg-hyper-cyan');
+            
+            span.className = `brutal-btn brutal-item ${color} px-6 py-3 text-2xl rounded-sm ${rotate} hover:rotate-0 transform transition-transform`;
+            if (i % 3 === 1) span.classList.add('text-white');
+            
+            span.innerHTML = `<i class="fas fa-code mr-2"></i>${t}`;
+            span.addEventListener('mouseenter', () => playSound('hover'));
+            techWall.appendChild(span);
+        });
+    }
+
+    // 3. Render QA
+    function renderQA() {
+        const grid = document.getElementById('qa-grid');
+        qaData.forEach((item, i) => {
+            const card = document.createElement('div');
+            const rotate = (i % 2 === 0) ? '-rotate-1' : 'rotate-1';
+            card.className = `brutal-box qa-card brutal-item ${item.color} p-4 cursor-pointer transform ${rotate} hover:z-20`;
+            
+            card.innerHTML = `
+                <div class="flex justify-between items-center pointer-events-none">
+                    <h3 class="text-2xl font-comic leading-none">${item.q}</h3>
+                    <span class="text-2xl">🤔</span>
+                </div>
+                <div class="qa-answer">
+                    <div class="pt-4 mt-4 border-t-4 border-black font-sans font-bold text-lg flex items-center gap-2">
+                        <span>👉</span>
+                        <p>${item.a}</p>
+                    </div>
+                </div>
+            `;
+            
+            card.addEventListener('click', () => {
+                const isOpen = card.classList.contains('open');
+                // Close others
+                document.querySelectorAll('.qa-card').forEach(c => c.classList.remove('open'));
+                
+                if(!isOpen) {
+                    card.classList.add('open');
+                    playSound('slide');
+                } else {
+                    playSound('pop');
+                }
+            });
+
+            grid.appendChild(card);
+        });
+    }
+
+    /* --- GAME 1: BUG SMASHER --- */
+    function initBugGame() {
+        const area = document.getElementById('bug-area');
+        const startBtn = document.getElementById('start-bug-btn');
+        const scoreEl = document.getElementById('bug-score');
+        let score = 0;
+        let gameInterval;
+        let active = false;
+
+        startBtn.addEventListener('click', () => {
+            if(active) return;
+            active = true;
+            score = 0;
+            scoreEl.innerText = 0;
+            area.innerHTML = '';
+            startBtn.innerText = "HUNTING BUGS...";
+            
+            // Spawn bugs loop
+            let count = 0;
+            gameInterval = setInterval(() => {
+                if(count > 20) {
+                    clearInterval(gameInterval);
+                    active = false;
+                    startBtn.innerText = "GAME OVER - PLAY AGAIN";
+                    return;
+                }
+                const bug = document.createElement('div');
+                bug.className = 'bug-target text-4xl absolute select-none';
+                bug.innerText = ['🐛', '🪲', '🕷️', '🦟'][Math.floor(Math.random()*4)];
+                bug.style.left = Math.random() * 90 + '%';
+                bug.style.top = Math.random() * 80 + '%';
+                
+                // Bug movement animation
+                const moveAnim = bug.animate([
+                    { transform: 'translate(0,0)' },
+                    { transform: `translate(${Math.random()*100-50}px, ${Math.random()*100-50}px)` }
+                ], {
+                    duration: 1000,
+                    iterations: Infinity,
+                    direction: 'alternate'
+                });
+
+                bug.addEventListener('mousedown', (e) => {
+                    e.stopPropagation();
+                    score += 100;
+                    scoreEl.innerText = score;
+                    playSound('squish');
+                    // Splat effect
+                    bug.innerText = '💥';
+                    moveAnim.cancel();
+                    setTimeout(() => bug.remove(), 200);
+                });
+
+                area.appendChild(bug);
+                count++;
+            }, 800);
+        });
+    }
+
+    /* --- GAME 2: SYNTHESIZER --- */
+    function initSynth() {
+        const grid = document.getElementById('synth-grid');
+        // Pentatonic Scale
+        const frequencies = [
+            261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33, 659.25,
+            783.99, 880.00, 1046.50, 1174.66, 1318.51, 1567.98, 1760.00, 2093.00
+        ];
+        const colors = ['bg-hyper-cyan', 'bg-hyper-pink', 'bg-hyper-lime', 'bg-hyper-yellow'];
+
+        frequencies.forEach((freq, i) => {
+            const pad = document.createElement('div');
+            const color = colors[i % 4];
+            pad.className = `synth-pad w-full h-full rounded-lg cursor-pointer ${color} opacity-80 hover:opacity-100 border-2 border-white`;
+            
+            pad.addEventListener('mouseenter', () => {
+                playSynthNote(pad, freq);
+            });
+            pad.addEventListener('mousedown', () => {
+                playSynthNote(pad, freq);
+            });
+            
+            grid.appendChild(pad);
+        });
+    }
+
+    function playSynthNote(el, freq) {
+        playSound('synth', freq);
+        el.classList.add('active');
+        setTimeout(() => el.classList.remove('active'), 150);
+    }
+
+    /* --- PHYSICS ENGINE (Gravity Mode) --- */
+    let physicsObjects = [];
+
+    function enableGravity() {
+        if(state.gravityMode) return;
+        state.gravityMode = true;
+        
+        // Collect everything that should fall
+        const elements = document.querySelectorAll('.brutal-box, .brutal-btn, .sticker, .brutal-item');
+        
+        elements.forEach(el => {
+            // Check if already processed
+            if(el.classList.contains('physics-body')) return;
+
+            const rect = el.getBoundingClientRect();
+            // Preserve visual position but switch to fixed
+            el.style.left = rect.left + 'px';
+            el.style.top = rect.top + 'px';
+            el.style.width = rect.width + 'px';
+            // el.style.height = rect.height + 'px'; // Height can be flexible
+            
+            // Random initial velocity
+            const vx = (Math.random() - 0.5) * 10;
+            const vy = (Math.random() - 0.5) * 10;
+            const angularVel = (Math.random() - 0.5) * 0.2;
+
+            physicsObjects.push({
+                el: el,
+                x: rect.left,
+                y: rect.top,
+                vx: vx,
+                vy: vy,
+                w: rect.width,
+                h: rect.height,
+                angle: 0,
+                va: angularVel,
+                isDragging: false
+            });
+
+            el.classList.add('physics-body');
+            
+            // Allow throwing
+            el.addEventListener('mousedown', (e) => {
+                const obj = physicsObjects.find(o => o.el === el);
+                if(obj) {
+                    obj.isDragging = true;
+                    obj.vx = 0;
+                    obj.vy = 0;
+                }
+            });
+        });
+        
+        // Add mouse throw handler globally
+        window.addEventListener('mouseup', () => {
+            physicsObjects.forEach(obj => obj.isDragging = false);
+        });
+        window.addEventListener('mousemove', (e) => {
+             physicsObjects.forEach(obj => {
+                 if(obj.isDragging) {
+                     obj.vx = (e.movementX) * 0.5;
+                     obj.vy = (e.movementY) * 0.5;
+                     obj.x = e.clientX - obj.w/2;
+                     obj.y = e.clientY - obj.h/2;
+                 }
+             });
+        });
+
+        alert("⚠️ GRAVITY FAILURE IMMINENT ⚠️");
+        playSound('crash');
+    }
+
+    function gameLoop() {
+        if(state.gravityMode) {
+            physicsObjects.forEach(obj => {
+                if(obj.isDragging) {
+                    obj.el.style.transform = `translate(${0}px, ${0}px) rotate(${obj.angle}rad)`; // Reset transform during fixed drag
+                    obj.el.style.left = obj.x + 'px';
+                    obj.el.style.top = obj.y + 'px';
+                    return;
+                }
+
+                // Apply Physics
+                obj.vy += CONFIG.gravity;
+                obj.x += obj.vx;
+                obj.y += obj.vy;
+                obj.angle += obj.va;
+
+                // Floor Collision
+                if(obj.y + obj.h > window.innerHeight) {
+                    obj.y = window.innerHeight - obj.h;
+                    obj.vy *= -CONFIG.bounce;
+                    obj.vx *= CONFIG.friction;
+                    obj.va *= 0.9;
+                    if(Math.abs(obj.vy) > 2) playSound('crash'); // Sound on bounce
+                }
+                
+                // Walls
+                if(obj.x < 0) {
+                    obj.x = 0;
+                    obj.vx *= -CONFIG.bounce;
+                }
+                if(obj.x + obj.w > window.innerWidth) {
+                    obj.x = window.innerWidth - obj.w;
+                    obj.vx *= -CONFIG.bounce;
+                }
+
+                // Update DOM
+                obj.el.style.left = obj.x + 'px';
+                obj.el.style.top = obj.y + 'px';
+                obj.el.style.transform = `rotate(${obj.angle}rad)`;
+            });
+        }
+        
+        if(state.raining && Math.random() < 0.1) {
+            spawnFallingSticker();
+        }
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    /* --- INTERACTIONS --- */
+
+    // 1. Sticker Spawner
+    function spawnStickers(count) {
+        const layer = document.getElementById('sticker-layer');
+        for(let i=0; i<count; i++) {
+            const el = document.createElement('div');
+            el.className = 'sticker text-6xl pointer-events-auto transition-transform active:scale-125';
+            el.innerText = stickers[Math.floor(Math.random() * stickers.length)];
+            el.style.left = Math.random() * 90 + '%';
+            el.style.top = Math.random() * 90 + '%';
+            el.style.transform = `rotate(${Math.random() * 360}deg)`;
+            makeDraggable(el);
+            layer.appendChild(el);
+        }
+    }
+    
+    function spawnFallingSticker() {
+         const el = document.createElement('div');
+         el.className = 'sticker text-6xl pointer-events-auto z-50';
+         el.innerText = stickers[Math.floor(Math.random() * stickers.length)];
+         el.style.left = Math.random() * 100 + '%';
+         el.style.top = '-100px';
+         
+         // If gravity is ON, add to physics engine
+         if(state.gravityMode) {
+            document.body.appendChild(el); // Move to body for physics
+            const rect = el.getBoundingClientRect();
+             physicsObjects.push({
+                el: el,
+                x: Math.random() * window.innerWidth,
+                y: -100,
+                vx: (Math.random()-0.5)*5,
+                vy: Math.random()*10,
+                w: 60, h: 60, angle: 0, va: 0.1, isDragging: false
+            });
+            el.classList.add('physics-body');
+         } else {
+             // CSS Animation fall
+             el.style.transition = `top ${Math.random()*2 + 2}s linear`;
+             document.getElementById('sticker-layer').appendChild(el);
+             setTimeout(() => el.style.top = '110vh', 100);
+             setTimeout(() => el.remove(), 4000);
+         }
+    }
+
+    function makeDraggable(el) {
+        let isDragging = false;
+        let startX, startY, initialLeft, initialTop;
+        el.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            initialLeft = el.offsetLeft;
+            initialTop = el.offsetTop;
+            el.style.cursor = 'grabbing';
+            playSound('pop');
+        });
+        window.addEventListener('mousemove', (e) => {
+            if(!isDragging) return;
+            el.style.left = `${initialLeft + (e.clientX - startX)}px`;
+            el.style.top = `${initialTop + (e.clientY - startY)}px`;
+        });
+        window.addEventListener('mouseup', () => {
+            if(isDragging) { isDragging = false; el.style.cursor = 'grab'; playSound('pop'); }
+        });
+    }
+
+    // 2. Glitch Text (Hacker Effect)
+    function initHackerText() {
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+";
+        document.querySelectorAll('.hacker-text').forEach(target => {
+            target.onmouseover = event => {
+                let iteration = 0;
+                let interval = setInterval(() => {
+                    event.target.innerText = event.target.innerText
+                    .split("")
+                    .map((letter, index) => {
+                        if(index < iteration) {
+                            return event.target.dataset.value[index];
+                        }
+                        return letters[Math.floor(Math.random() * 26)];
+                    })
+                    .join("");
+                    
+                    if(iteration >= event.target.dataset.value.length) { 
+                        clearInterval(interval);
+                    }
+                    iteration += 1/3;
+                }, 30);
+            }
+        });
+    }
+
+    // 3. Slot Machine Color Remix
+    const remixBtn = document.getElementById('remix-btn');
+    remixBtn.addEventListener('click', () => {
+        playSound('remix');
+        const r = () => Math.floor(Math.random() * 255);
+        document.documentElement.style.setProperty('--bg-color', `rgb(${r()},${r()},${r()})`);
+        
+        // Randomize all brutal boxes
+        document.querySelectorAll('.brutal-box, .brutal-btn').forEach(el => {
+            el.style.backgroundColor = `rgb(${r()},${r()},${r()})`;
+            el.style.color = Math.random() > 0.5 ? 'black' : 'white';
+        });
+    });
+
+    // 4. Gravity Button
+    document.getElementById('gravity-btn').addEventListener('click', () => {
+        enableGravity();
+    });
+
+    // 5. Rain Button
+    const rainBtn = document.getElementById('rain-btn');
+    rainBtn.addEventListener('click', () => {
+        state.raining = !state.raining;
+        rainBtn.classList.toggle('bg-blue-500');
+        playSound('remix');
+        if(state.raining) alert("Rain Incoming!");
+    });
+
+    // 6. Draw Mode
+    const canvas = document.getElementById('graffiti-canvas');
+    const ctx = canvas.getContext('2d');
+    const drawBtn = document.getElementById('draw-btn');
+    let drawing = false;
+
+    function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    drawBtn.addEventListener('click', () => {
+        document.body.classList.toggle('drawing-mode');
+        drawBtn.innerText = document.body.classList.contains('drawing-mode') ? "❌" : "✏️";
+        playSound('pop');
+    });
+
+    canvas.addEventListener('mousedown', (e) => {
+        if(!document.body.classList.contains('drawing-mode')) return;
+        drawing = true;
+        ctx.beginPath();
+        ctx.moveTo(e.clientX, e.clientY);
+        ctx.lineWidth = 8;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = `hsl(${Math.random() * 360}, 100%, 50%)`;
+    });
+    canvas.addEventListener('mousemove', (e) => {
+        if(!drawing) return;
+        ctx.lineTo(e.clientX, e.clientY);
+        ctx.stroke();
+    });
+    canvas.addEventListener('mouseup', () => drawing = false);
+
+    // 7. Particle Trail
+    const pCanvas = document.getElementById('particle-canvas');
+    const pCtx = pCanvas.getContext('2d');
+    pCanvas.width = window.innerWidth;
+    pCanvas.height = window.innerHeight;
+    let particles = [];
+
+    window.addEventListener('mousemove', (e) => {
+        for(let i=0; i<3; i++) {
+            particles.push({
+                x: e.clientX, y: e.clientY,
+                vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2,
+                life: 1, color: `hsl(${Math.random()*360}, 100%, 50%)`
+            });
+        }
+    });
+
+    function updateParticles() {
+        pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+        particles.forEach((p, i) => {
+            p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+            pCtx.fillStyle = p.color;
+            pCtx.globalAlpha = p.life;
+            pCtx.beginPath();
+            pCtx.arc(p.x, p.y, 4, 0, Math.PI*2);
+            pCtx.fill();
+            if(p.life <= 0) particles.splice(i, 1);
+        });
+        requestAnimationFrame(updateParticles);
+    }
+    updateParticles();
+
+    // 8. Comic Pop
+    document.addEventListener('click', (e) => {
+        if(e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || state.gravityMode) return;
+        if(document.body.classList.contains('drawing-mode') || e.target.closest('.qa-card')) return;
+
+        const pop = document.createElement('div');
+        pop.className = 'pop-text text-5xl md:text-7xl text-hyper-yellow font-comic';
+        pop.style.left = e.pageX + 'px';
+        pop.style.top = e.pageY + 'px';
+        pop.innerText = clickWords[Math.floor(Math.random() * clickWords.length)];
+        pop.style.color = `hsl(${Math.random()*360}, 100%, 50%)`;
+        document.body.appendChild(pop);
+        playSound('pop');
+        setTimeout(() => pop.remove(), 600);
+    });
+
+    // 9. Avatar Shake
+    window.shakeAvatar = function() {
+        const img = document.getElementById('avatar-img');
+        const bubble = document.getElementById('speech-bubble');
+        const text = document.getElementById('speech-text');
+        playSound('pop');
+        img.style.transform = 'scale(0.9) rotate(20deg)';
+        setTimeout(() => img.style.transform = 'scale(1.1) rotate(-20deg)', 100);
+        setTimeout(() => img.style.transform = 'scale(1) rotate(0deg)', 200);
+        
+        bubble.classList.remove('hidden');
+        text.innerText = avatarPhrases[Math.floor(Math.random() * avatarPhrases.length)];
+        setTimeout(() => bubble.classList.add('hidden'), 2000);
+    }
+
+  </script>
+</body>
+</html>
