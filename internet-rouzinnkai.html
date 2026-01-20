@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>インターネット老人検定（25問）</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .question {
+      background: #fff;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      border-left: 4px solid #888;
+    }
+    .q-title {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+    .choices label {
+      display: block;
+      margin-left: 8px;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-align: center;
+    }
+    #judge {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 1.1em;
+    }
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>インターネット老人検定</h1>
+  <h2>〜古のネット民の記憶を問う25問〜</h2>
+
+  <!-- Q1 -->
+  <div class="question" data-answer="2">
+    <div class="q-title">Q1. 初期ホームページで「工事中」を表す定番の演出はどれ？</div>
+    <div class="choices">
+      <label><input type="radio" name="q1" value="1"> 点滅する「NEW!」アイコン</label>
+      <label><input type="radio" name="q1" value="2"> アンダーコンストラクションGIF</label>
+      <label><input type="radio" name="q1" value="3"> パララックススクロール背景</label>
+      <label><input type="radio" name="q1" value="4"> 動くSVGローディング</label>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question" data-answer="3">
+    <div class="q-title">Q2. 「orz」が表している感情として最も近いものは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q2" value="1"> 喜び</label>
+      <label><input type="radio" name="q2" value="2"> 驚き</label>
+      <label><input type="radio" name="q2" value="3"> 落ち込み・絶望</label>
+      <label><input type="radio" name="q2" value="4"> 怒り</label>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question" data-answer="3">
+    <div class="q-title">Q3. Flash黄金期を象徴する存在として最もふさわしいものは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q3" value="1"> TikTok</label>
+      <label><input type="radio" name="q3" value="2"> YouTubeショート</label>
+      <label><input type="radio" name="q3" value="3"> 神アニメなどのFlash作品</label>
+      <label><input type="radio" name="q3" value="4"> Instagramリール</label>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question" data-answer="1">
+    <div class="q-title">Q4. mixiで「監視されている感」を生んでいた機能はどれ？</div>
+    <div class="choices">
+      <label><input type="radio" name="q4" value="1"> 足あと</label>
+      <label><input type="radio" name="q4" value="2"> ストーリー</label>
+      <label><input type="radio" name="q4" value="3"> スペース</label>
+      <label><input type="radio" name="q4" value="4"> ライブ配信</label>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="question" data-answer="4">
+    <div class="q-title">Q5. 「前略プロフィール」が主に担っていた役割として最も近いものは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q5" value="1"> 仕事用ポートフォリオ</label>
+      <label><input type="radio" name="q5" value="2"> 動画共有サイト</label>
+      <label><input type="radio" name="q5" value="3"> オンラインストレージ</label>
+      <label><input type="radio" name="q5" value="4"> 中高生の自己紹介＆黒歴史保管庫</label>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="question" data-answer="2">
+    <div class="q-title">Q6. ガラケー時代、「フルブラウザ」が有料だった主な理由として最も適切なのは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q6" value="1"> 端末のバッテリー保護のため</label>
+      <label><input type="radio" name="q6" value="2"> パケット通信料が高額で、別料金扱いだったため</label>
+      <label><input type="radio" name="q6" value="3"> 画面解像度が低かったため</label>
+      <label><input type="radio" name="q6" value="4"> 法律で制限されていたため</label>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="question" data-answer="1">
+    <div class="q-title">Q7. 2ちゃんねるでスレッドが一定期間書き込みがなく消えることを何と呼んだ？</div>
+    <div class="choices">
+      <label><input type="radio" name="q7" value="1"> dat落ち</label>
+      <label><input type="radio" name="q7" value="2"> タイムアウト</label>
+      <label><input type="radio" name="q7" value="3"> アーカイブ</label>
+      <label><input type="radio" name="q7" value="4"> ログクリア</label>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="question" data-answer="4">
+    <div class="q-title">Q8. 初期個人ホームページでよく見られた「訪問者数」を示すものは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q8" value="1"> アクセスアナリティクス</label>
+      <label><input type="radio" name="q8" value="2"> リアルタイムビューカウンタ</label>
+      <label><input type="radio" name="q8" value="3"> SNSシェア数</label>
+      <label><input type="radio" name="q8" value="4"> カウンター（000123などと表示される）</label>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="question" data-answer="2">
+    <div class="q-title">Q9. 「Winny」が社会問題になった主な理由として最も適切なのは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q9" value="1"> チャット機能が危険だったため</label>
+      <label><input type="radio" name="q9" value="2"> 著作物や機密情報の違法共有・流出が多発したため</label>
+      <label><input type="radio" name="q9" value="3"> ウイルス対策ソフトを削除したため</label>
+      <label><input type="radio" name="q9" value="4"> ブラウザを乗っ取ったため</label>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="question" data-answer="3">
+    <div class="q-title">Q10. 「魔法のiらんど」が特に強かった分野はどれ？</div>
+    <div class="choices">
+      <label><input type="radio" name="q10" value="1"> ビジネスブログ</label>
+      <label><input type="radio" name="q10" value="2"> 動画配信</label>
+      <label><input type="radio" name="q10" value="3"> ケータイ小説・個人サイト</label>
+      <label><input type="radio" name="q10" value="4"> オンラインゲーム</label>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="question" data-answer="1">
+    <div class="q-title">Q11. 初期ニコニコ動画で、コメント職人がよく使った「目立つコメント色」は？</div>
+    <div class="choices">
+      <label><input type="radio" name="q11" value="1"> 赤</label>
+      <label><input type="radio" name="q11" value="2"> グレー</label>
+      <label><input type="radio" name="q11" value="3"> 黒</label>
+      <label><input type="radio" name="q11" value="4"> 薄い水色</label>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="question" data-answer="4">
+    <div class="q-title">Q12. 「ｗｗｗ」が表しているものとして最も適切なのは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q12" value="1"> World Wide Web</label>
+      <label><input type="radio" name="q12" value="2"> 怒り</label>
+      <label><input type="radio" name="q12" value="3"> 困惑</label>
+      <label><input type="radio" name="q12" value="4"> 笑い</label>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="question" data-answer="2">
+    <div class="q-title">Q13. 「2ちゃんねるの祭り」が発生する典型的なきっかけとして最も近いものは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q13" value="1"> 管理人の公式イベント</label>
+      <label><input type="radio" name="q13" value="2"> 炎上ネタ・不祥事・面白いネタの拡散</label>
+      <label><input type="radio" name="q13" value="3"> 定期メンテナンス</label>
+      <label><input type="radio" name="q13" value="4"> 新機能の追加</label>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="question" data-answer="3">
+    <div class="q-title">Q14. 「GREE」や「モバゲー」が全盛だった頃、主に遊ばれていたのはどのようなゲーム？</div>
+    <div class="choices">
+      <label><input type="radio" name="q14" value="1"> 高度な3Dアクションゲーム</label>
+      <label><input type="radio" name="q14" value="2"> VRゲーム</label>
+      <label><input type="radio" name="q14" value="3"> ガラケー向けのシンプルなソーシャルゲーム</label>
+      <label><input type="radio" name="q14" value="4"> ブロックチェーンゲーム</label>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="question" data-answer="1">
+    <div class="q-title">Q15. 「前略プロフ」などでよく見られた“黒歴史”要素として最もありがちなのは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q15" value="1"> 痛いポエムや恋愛観の詳細な記述</label>
+      <label><input type="radio" name="q15" value="2"> 仕事用の実名履歴書</label>
+      <label><input type="radio" name="q15" value="3"> 投資ポートフォリオ</label>
+      <label><input type="radio" name="q15" value="4"> 企業のIR情報</label>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="question" data-answer="4">
+    <div class="q-title">Q16. 初期ブログ文化で「トラックバック」が担っていた役割として最も近いものは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q16" value="1"> 画像の圧縮</label>
+      <label><input type="radio" name="q16" value="2"> スパム防止</label>
+      <label><input type="radio" name="q16" value="3"> コメントの削除</label>
+      <label><input type="radio" name="q16" value="4"> 関連する記事同士を相互にリンクさせる仕組み</label>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="question" data-answer="2">
+    <div class="q-title">Q17. 「iモード」が象徴していたのはどのような時代か？</div>
+    <div class="choices">
+      <label><input type="radio" name="q17" value="1"> 5Gスマホ時代</label>
+      <label><input type="radio" name="q17" value="2"> ガラケーでのモバイルインターネット黎明期</label>
+      <label><input type="radio" name="q17" value="3"> 光回線の普及期</label>
+      <label><input type="radio" name="q17" value="4"> メタバース全盛期</label>
+    </div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="question" data-answer="3">
+    <div class="q-title">Q18. 初期YouTubeでよく見られた「MAD動画」とは何か？</div>
+    <div class="choices">
+      <label><input type="radio" name="q18" value="1"> 精神的に危険な動画</label>
+      <label><input type="radio" name="q18" value="2"> 公式のプロモーション動画</label>
+      <label><input type="radio" name="q18" value="3"> 既存のアニメや音楽を編集して作られた二次創作動画</label>
+      <label><input type="radio" name="q18" value="4"> 医療系の解説動画</label>
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="question" data-answer="1">
+    <div class="q-title">Q19. 「掲示板文化」でよく使われた「sage」の意味として正しいものは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q19" value="1"> スレッドを上げずに書き込むこと</label>
+      <label><input type="radio" name="q19" value="2"> スレッドを削除すること</label>
+      <label><input type="radio" name="q19" value="3"> スレッドをお気に入りに登録すること</label>
+      <label><input type="radio" name="q19" value="4"> スレッドをロックすること</label>
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="question" data-answer="4">
+    <div class="q-title">Q20. 「テキストサイト」と呼ばれていたものの特徴として最も適切なのは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q20" value="1"> 動画中心のサイト</label>
+      <label><input type="radio" name="q20" value="2"> 画像掲示板</label>
+      <label><input type="radio" name="q20" value="3"> オンラインゲームの公式サイト</label>
+      <label><input type="radio" name="q20" value="4"> 長文テキスト中心の個人サイト・日記サイト</label>
+    </div>
+  </div>
+
+  <!-- Q21 -->
+  <div class="question" data-answer="2">
+    <div class="q-title">Q21. 「ネチケット」という言葉が指していたものは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q21" value="1"> ネット回線の種類</label>
+      <label><input type="radio" name="q21" value="2"> インターネット上でのマナー・エチケット</label>
+      <label><input type="radio" name="q21" value="3"> 暗号化技術</label>
+      <label><input type="radio" name="q21" value="4"> 課金システム</label>
+    </div>
+  </div>
+
+  <!-- Q22 -->
+  <div class="question" data-answer="3">
+    <div class="q-title">Q22. 「掲示板の管理人」がよく行っていた作業として最も適切なのは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q22" value="1"> 回線工事</label>
+      <label><input type="radio" name="q22" value="2"> ブラウザの開発</label>
+      <label><input type="radio" name="q22" value="3"> 荒らしの削除・規約違反投稿の管理</label>
+      <label><input type="radio" name="q22" value="4"> 端末の修理</label>
+    </div>
+  </div>
+
+  <!-- Q23 -->
+  <div class="question" data-answer="1">
+    <div class="q-title">Q23. 「プロフ帳」文化がオンラインに移った形として最も近いものは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q23" value="1"> 前略プロフィール</label>
+      <label><input type="radio" name="q23" value="2"> クラウドストレージ</label>
+      <label><input type="radio" name="q23" value="3"> オンラインバンキング</label>
+      <label><input type="radio" name="q23" value="4"> 動画配信サービス</label>
+    </div>
+  </div>
+
+  <!-- Q24 -->
+  <div class="question" data-answer="4">
+    <div class="q-title">Q24. 「掲示板での連投」を嫌われないように行うための暗黙の工夫として最も近いものは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q24" value="1"> ひたすら同じ内容をコピペする</label>
+      <label><input type="radio" name="q24" value="2"> 全角文字だけを使う</label>
+      <label><input type="radio" name="q24" value="3"> 荒らしを装う</label>
+      <label><input type="radio" name="q24" value="4"> まとめて書く・sage進行にするなど空気を読む</label>
+    </div>
+  </div>
+
+  <!-- Q25 -->
+  <div class="question" data-answer="2">
+    <div class="q-title">Q25. あなたがここまでの問題に「懐かしさ」を感じたとしたら、その理由として最も適切なのは？</div>
+    <div class="choices">
+      <label><input type="radio" name="q25" value="1"> すべて未来の話だから</label>
+      <label><input type="radio" name="q25" value="2"> あの頃のインターネットをリアルタイムで経験しているから</label>
+      <label><input type="radio" name="q25" value="3"> まったく知らないが雰囲気だけで答えているから</label>
+      <label><input type="radio" name="q25" value="4"> 実はAIだから</label>
+    </div>
+  </div>
+
+  <button onclick="grade()">採点する</button>
+
+  <div id="result"></div>
+  <div id="judge"></div>
+
+  <script>
+    function grade() {
+      const questions = document.querySelectorAll('.question');
+      let score = 0;
+      let total = questions.length;
+
+      questions.forEach((q, index) => {
+        const answer = q.getAttribute('data-answer');
+        const name = 'q' + (index + 1);
+        const checked = q.querySelector('input[name="' + name + '"]:checked');
+        if (checked && checked.value === answer) {
+          score++;
+        }
+      });
+
+      const result = document.getElementById('result');
+      const judge = document.getElementById('judge');
+      result.textContent = 'あなたの得点：' + score + ' / ' + total;
+
+      let msg = '';
+      if (score >= 23) {
+        msg = '文明レベル：古代ネット民（特級）──完全にインターネット老人です。';
+      } else if (score >= 18) {
+        msg = '文明レベル：上級古参──かなり濃いネットの地層を知っています。';
+      } else if (score >= 12) {
+        msg = '文明レベル：中堅ネット民──ところどころ古い記憶が光っています。';
+      } else if (score >= 6) {
+        msg = '文明レベル：若手ネット民──伝承として聞いたことがあるレベルかも。';
+      } else {
+        msg = '文明レベル：新人──ここから古の文化を学んでいきましょう。';
+      }
+      judge.textContent = msg;
+    }
+  </script>
+</body>
+</html>
